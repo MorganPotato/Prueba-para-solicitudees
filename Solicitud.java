@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Solicitud {
@@ -9,6 +11,9 @@ public class Solicitud {
     private boolean solicitudAprobada;
 
 
+    private static List<Solicitud> registroSolicitudes = new ArrayList<>();
+
+    // Constructor
     public Solicitud(String nombreCliente, String correo, String telefono, String tipoMascotaPreferida) {
         this.nombreCliente = nombreCliente;
         this.correo = correo;
@@ -17,46 +22,6 @@ public class Solicitud {
         this.solicitudAprobada = false;
     }
 
-    // Getters y Setters
-    public String getNombreCliente() {
-        return nombreCliente;
-    }
-
-    public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getTipoMascotaPreferida() {
-        return tipoMascotaPreferida;
-    }
-
-    public void setTipoMascotaPreferida(String tipoMascotaPreferida) {
-        this.tipoMascotaPreferida = tipoMascotaPreferida;
-    }
-
-    public boolean isSolicitudAprobada() {
-        return solicitudAprobada;
-    }
-
-    public void setSolicitudAprobada(boolean solicitudAprobada) {
-        this.solicitudAprobada = solicitudAprobada;
-    }
 
 
     public void imprimirSolicitud() {
@@ -69,8 +34,38 @@ public class Solicitud {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        int opcion = 0;
 
-        System.out.println("Ingrese su nombre:");
+        while (opcion != 3) { // 3 para salir del menú
+            System.out.println("\nMenú de opciones");
+            System.out.println("1. Registrar nueva solicitud");
+            System.out.println("2. Ver registro de solicitudes");
+            System.out.println("3. Salir");
+            System.out.println("Seleccione una opción:");
+
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Consumir el salto de línea
+
+            switch (opcion) {
+                case 1:
+                    registrarSolicitud(scanner);
+                    break;
+                case 2:
+                    verRegistroSolicitudes();
+                    break;
+                case 3:
+                    System.out.println("Saliendo del programa...");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Intente nuevamente.");
+                    break;
+            }
+        }
+        scanner.close();
+    }
+
+    public static void registrarSolicitud(Scanner scanner) {
+        System.out.println("\nIngrese su nombre:");
         String nombre = scanner.nextLine();
 
         System.out.println("Ingrese su correo:");
@@ -83,10 +78,22 @@ public class Solicitud {
         String tipoMascota = scanner.nextLine();
 
         Solicitud solicitud = new Solicitud(nombre, correo, telefono, tipoMascota);
+        registroSolicitudes.add(solicitud);
 
-        System.out.println("\nInformacion de la solicitud:");
-        solicitud.imprimirSolicitud();
+        System.out.println("Solicitud registrada exitosamente.");
+    }
 
-        scanner.close();
+    public static void verRegistroSolicitudes() {
+        if (registroSolicitudes.isEmpty()) {
+            System.out.println("No hay solicitudes registradas.");
+            return;
+        }
+
+        System.out.println("\nRegistro de solicitudes:");
+        for (int i = 0; i < registroSolicitudes.size(); i++) {
+            System.out.println("Solicitud " + (i + 1) + ":");
+            registroSolicitudes.get(i).imprimirSolicitud();
+            System.out.println("------------------------------");
+        }
     }
 }
